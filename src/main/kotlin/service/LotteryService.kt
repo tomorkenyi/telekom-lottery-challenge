@@ -19,7 +19,7 @@ class LotteryService(
         val drawnNumbers = drawnNumberReaderService.readDrawnNumbers()
 
         logger.debug("Search started.")
-        drawnNumbers?.let { winnerEvaluatorService.searchWinners(numbers, it) }
+        drawnNumbers!!.let { winnerEvaluatorService.searchWinners(numbers, it) }
         logger.debug("Search complete.")
     }
 
