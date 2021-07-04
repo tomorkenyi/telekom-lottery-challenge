@@ -17,9 +17,10 @@ class WinnerEvaluatorService {
     }
 
     private fun checkNumbers(inputNumbers: BufferedReader, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
+        val regex = ValidatorUtil.pattern.toRegex()
         inputNumbers.forEachLine { line ->
             when {
-                ValidatorUtil.pattern.toRegex().matches(line) ->
+                regex.matches(line) ->
                     line.split(" ")
                         .count { drawnNumbers.contains(it) }
                         .let { winners.merge(it, 1, Int::plus) }
