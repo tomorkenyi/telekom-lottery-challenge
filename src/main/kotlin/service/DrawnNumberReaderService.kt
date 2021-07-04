@@ -1,6 +1,7 @@
 package service
 
 import org.jboss.logging.Logger
+import util.ValidatorUtil.Companion.validate
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -22,9 +23,5 @@ class DrawnNumberReaderService {
             System.err.println("Please provide 5 valid lottery numbers separated by space.")
         }
         return readDrawnNumbers()
-    }
-
-    fun validate(line: String): Boolean {
-        return line.matches(Regex("^((90|[1-8][0-9]|[1-9])\\s){4}(90|[1-8][0-9]|[1-9])\$"))
     }
 }
