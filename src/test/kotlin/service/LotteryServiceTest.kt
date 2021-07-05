@@ -1,5 +1,10 @@
 package service
 
+import TestConstants.fileName
+import TestConstants.one_is_illegal
+import TestConstants.sample
+import TestUtil.Companion.createFile
+import TestUtil.Companion.deleteFile
 import io.mockk.every
 import io.mockk.mockk
 import io.quarkus.test.junit.QuarkusMock
@@ -29,48 +34,57 @@ class LotteryServiceTest {
     @field: Default
     lateinit var numberReaderService: NumberReaderService
 
+    lateinit var file: File
+
     @BeforeEach
     internal fun setUp() {
-        createFile("input.txt")
+        file = createFile()
+    }
+
+    @Test
+    fun testStartLottery_one_2_one_3_one_4_three_5() {
+        file.writeText(sample)
+        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("1", "2", "3", "4", "5")
+        assertEquals("1 1 1 3", lotteryService.startLottery(numberReaderService.loadNumbers(fileName)))
+    }
+
+    @Test
+    fun testStartLottery_two_2() {
+        file.writeText(sample)
+        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("31", "40", "35", "90", "89")
+        assertEquals("0 1 0 0", lotteryService.startLottery(numberReaderService.loadNumbers(fileName)))
+    }
+
+    @Test
+    fun testStartLottery_one_3() {
+        file.writeText(sample)
+        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("31", "22", "77", "90", "89")
+        assertEquals("2 0 0 0", lotteryService.startLottery(numberReaderService.loadNumbers(fileName)))
+    }
+
+    @Test
+    fun testStartLottery_three_4() {
+        file.writeText(sample)
+        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("66", "33", "77", "55", "1")
+        assertEquals("0 0 3 0", lotteryService.startLottery(numberReaderService.loadNumbers(fileName)))
+    }
+
+    @Test
+    fun testStartLottery_one_2_one_3_one_4_two_5_one_illegal() {
+        file.writeText(one_is_illegal)
+        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("1", "2", "3", "4", "5")
+        assertEquals("1 1 1 2", lotteryService.startLottery(numberReaderService.loadNumbers(fileName)))
+    }
+
+    @Test
+    fun testStartLottery_zero_results() {
+        file.writeText(sample)
+        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("11", "12", "13", "14", "15")
+        assertEquals("0 0 0 0", lotteryService.startLottery(numberReaderService.loadNumbers(fileName)))
     }
 
     @AfterEach
     internal fun tearDown() {
-        deleteFile("input.txt")
-    }
-
-    @Test
-    fun startLottery() {
-        every { drawnNumberReaderService.readDrawnNumbers() } returns listOf("1", "2", "3", "4", "5")
-        assertEquals("1 1 1 3", lotteryService.startLottery(numberReaderService.loadNumbers("input.txt")))
-    }
-
-    fun createFile(fileName: String): File {
-        val file = File(fileName)
-
-        when {
-            file.createNewFile() -> {
-                file.writeText(
-                    "1 2 3 4 5\n" +
-                            "5 3 4 2 1\n" +
-                            "5 4 3 2 1\n" +
-                            "31 22 44 45 5\n" +
-                            "16 5 81 3 19\n" +
-                            "23 5 4 3 19\n" +
-                            "87 2 4 3 5\n" +
-                            "31 22 44 45 9\n"
-                )
-                println("$fileName is created successfully.")
-            }
-            else -> println("$fileName already exists.")
-        }
-        return file
-    }
-
-    fun deleteFile(fileName: String) {
-        val file = File(fileName)
-        if (file.exists()) {
-            file.delete()
-        }
+        deleteFile()
     }
 }

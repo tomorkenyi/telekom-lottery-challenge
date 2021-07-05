@@ -20,7 +20,7 @@ class DrawnNumberReaderService {
                 else -> throw NoSuchElementException("Pattern is not right.")
             }
         } catch (e: Exception) {
-            System.err.println("Please provide 5 valid lottery numbers separated by space.")
+            System.err.println("Please provide 5 distinct lottery numbers separated by space.")
         }
         return readDrawnNumbers()
     }
