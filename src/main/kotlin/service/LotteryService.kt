@@ -15,12 +15,13 @@ class LotteryService(
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun startLottery(numbers: BufferedReader) {
-        val drawnNumbers = drawnNumberReaderService.readDrawnNumbers()
-
-        logger.debug("Search started.")
-        drawnNumbers!!.let { winnerEvaluatorService.searchWinners(numbers, it) }
-        logger.debug("Search complete.")
+    fun startLottery(numbers: BufferedReader): String {
+        drawnNumberReaderService
+            .readDrawnNumbers()!!
+            .let {
+                logger.debug("Searching...")
+                return winnerEvaluatorService.searchWinners(numbers, it)
+            }
     }
 
 }

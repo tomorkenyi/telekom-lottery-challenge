@@ -10,10 +10,10 @@ class WinnerEvaluatorService {
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun searchWinners(inputNumbers: BufferedReader, drawnNumbers: List<String>) {
+    fun searchWinners(inputNumbers: BufferedReader, drawnNumbers: List<String>): String {
         val winners = HashMap<Int, Int>()
         checkNumbers(inputNumbers, drawnNumbers, winners)
-        printResults(winners)
+        return getResults(winners)
     }
 
     private fun checkNumbers(inputNumbers: BufferedReader, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
@@ -30,14 +30,15 @@ class WinnerEvaluatorService {
         logger.debug(winners)
     }
 
-    private fun printResults(winners: MutableMap<Int, Int>) {
-        for (i in 0..5) winners.putIfAbsent(i, 0)
+    private fun getResults(winners: MutableMap<Int, Int>): String {
+        (0..5).forEach { winners.putIfAbsent(it, 0) }
 
         val results = winners.entries
             .filter { e -> e.key > 1 }
             .joinToString(" ") { e -> e.value.toString() }
 
         println(results)
+        return results
     }
 }
 
