@@ -7,6 +7,7 @@ class ValidatorUtil {
 
         fun validate(line: String): Boolean {
             return when {
+                // TODO check with regex
                 !hasDuplicates(line) -> {
                     line.matches(Regex(pattern))
                 }

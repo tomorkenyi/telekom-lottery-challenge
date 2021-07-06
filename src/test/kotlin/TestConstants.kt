@@ -21,5 +21,8 @@ object TestConstants {
             "23 5 4 3 19\n" +
             "87 2 4 3 5\n" +
             "31 22 44 45 9\n"
+
+    const val drawnNumbers = "1 2 3 4 5\n" +
+            "5 3 4 2 1\n"
 }
 

@@ -16,8 +16,8 @@ class LotteryApplication(
 ) : QuarkusApplication {
 
     override fun run(vararg args: String?): Int {
+        val numbers = numberReaderService.loadNumbers(args[0] ?: throw IOException("Please provide a file."))
         while (true) {
-            val numbers = numberReaderService.loadNumbers(args[0] ?: throw IOException("Please provide a file."))
             println("READY")
             lotteryService.startLottery(numbers)
         }

@@ -1,7 +1,6 @@
 package service
 
 import org.jboss.logging.Logger
-import java.io.BufferedReader
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
@@ -15,13 +14,17 @@ class LotteryService(
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun startLottery(numbers: BufferedReader): String {
-        drawnNumberReaderService
-            .readDrawnNumbers()!!
-            .let {
-                logger.debug("Searching...")
-                return winnerEvaluatorService.searchWinners(numbers, it)
-            }
+    fun startLottery(inputNumbers: MutableList<String>): String {
+        val drawnNumbersList = drawnNumberReaderService.readDrawnNumbers()
+        logger.debug("Drawn numbers: $drawnNumbersList")
+        parallelSearch(drawnNumbersList, inputNumbers)
+        return "0 0 0 0"
     }
 
+    private fun parallelSearch(drawnNumbersList: MutableList<List<String>>, inputNumbers: MutableList<String>) {
+        drawnNumbersList.stream().parallel().forEach {
+            logger.debug("Searching...")
+            winnerEvaluatorService.searchWinners(inputNumbers, it)
+        }
+    }
 }

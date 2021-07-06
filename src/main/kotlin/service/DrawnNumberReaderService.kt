@@ -9,19 +9,24 @@ class DrawnNumberReaderService {
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun readDrawnNumbers(): List<String>? {
+    fun readDrawnNumbers(): MutableList<List<String>> {
         logger.debug("Start asking for input drawn numbers.")
 
-        val line = readLine() ?: throw IllegalArgumentException("No input is given.")
+        val lines = generateSequence(::readLine)
+        val assembledList = mutableListOf<List<String>>()
 
-        try {
-            return when (validate(line)) {
-                true -> line.split(" ")
-                else -> throw NoSuchElementException("Pattern is not right.")
+        lines.takeWhile { !it.matches("".toRegex()) }
+            .forEach { line ->
+                try {
+                    if (validate(line)) {
+                        assembledList.add(line.split(" "))
+                    } else {
+                        throw NoSuchElementException("Pattern is not right.")
+                    }
+                } catch (e: Exception) {
+                    System.err.println("Please provide 5 distinct lottery numbers separated by space.")
+                }
             }
-        } catch (e: Exception) {
-            System.err.println("Please provide 5 distinct lottery numbers separated by space.")
-        }
-        return readDrawnNumbers()
+        return assembledList
     }
 }

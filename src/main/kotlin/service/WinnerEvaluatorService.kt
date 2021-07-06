@@ -2,7 +2,6 @@ package service
 
 import org.jboss.logging.Logger
 import util.ValidatorUtil
-import java.io.BufferedReader
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -10,15 +9,15 @@ class WinnerEvaluatorService {
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun searchWinners(inputNumbers: BufferedReader, drawnNumbers: List<String>): String {
+    fun searchWinners(inputNumbers: MutableList<String>, drawnNumbers: List<String>): String {
         val winners = HashMap<Int, Int>()
         checkNumbers(inputNumbers, drawnNumbers, winners)
         return getResults(winners)
     }
 
-    private fun checkNumbers(inputNumbers: BufferedReader, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
+    private fun checkNumbers(inputNumbers: MutableList<String>, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
         val regex = ValidatorUtil.pattern.toRegex()
-        inputNumbers.forEachLine { line ->
+        inputNumbers.forEach { line ->
             when {
                 regex.matches(line) && !ValidatorUtil.hasDuplicates(line) ->
                     line.split(" ")
