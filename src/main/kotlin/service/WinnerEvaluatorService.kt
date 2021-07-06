@@ -30,14 +30,13 @@ class WinnerEvaluatorService {
     }
 
     private fun getResults(winners: MutableMap<Int, Int>): String {
-        (0..5).forEach { winners.putIfAbsent(it, 0) }
-
-        val results = winners.entries
+        return winners
+            .also { (0..5).forEach { winners.putIfAbsent(it, 0) } }.entries
             .filter { e -> e.key > 1 }
             .joinToString(" ") { e -> e.value.toString() }
-
-        println(results)
-        return results
+            .also {
+                println(it)
+            }
     }
 }
 

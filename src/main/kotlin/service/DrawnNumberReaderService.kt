@@ -12,21 +12,21 @@ class DrawnNumberReaderService {
     fun readDrawnNumbers(): MutableList<List<String>> {
         logger.debug("Start asking for input drawn numbers.")
 
-        val lines = generateSequence(::readLine)
-        val assembledList = mutableListOf<List<String>>()
+        val drawnNumberList = mutableListOf<List<String>>()
 
-        lines.takeWhile { !it.matches("".toRegex()) }
+        generateSequence(::readLine)
+            .takeWhile { !it.matches("".toRegex()) }
             .forEach { line ->
                 try {
-                    if (validate(line)) {
-                        assembledList.add(line.split(" "))
-                    } else {
-                        throw NoSuchElementException("Pattern is not right.")
+                    when {
+                        validate(line) -> drawnNumberList.add(line.split(" "))
+                        else -> throw NoSuchElementException("Pattern is not right for this line: $line")
                     }
                 } catch (e: Exception) {
-                    System.err.println("Please provide 5 distinct lottery numbers separated by space.")
+                    System.err.println("Please provide 5 distinct lottery numbers separated by space, cause: ${e.message}")
                 }
             }
-        return assembledList
+
+        return drawnNumberList
     }
 }

@@ -14,16 +14,14 @@ class LotteryService(
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun startLottery(inputNumbers: MutableList<String>): String {
+    fun startLottery(inputNumbers: MutableList<String>) {
         val drawnNumbersList = drawnNumberReaderService.readDrawnNumbers()
         logger.debug("Drawn numbers: $drawnNumbersList")
         parallelSearch(drawnNumbersList, inputNumbers)
-        return "0 0 0 0"
     }
 
     private fun parallelSearch(drawnNumbersList: MutableList<List<String>>, inputNumbers: MutableList<String>) {
         drawnNumbersList.stream().parallel().forEach {
-            logger.debug("Searching...")
             winnerEvaluatorService.searchWinners(inputNumbers, it)
         }
     }

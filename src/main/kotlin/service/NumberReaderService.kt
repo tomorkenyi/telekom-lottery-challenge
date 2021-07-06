@@ -10,12 +10,14 @@ class NumberReaderService {
 
     private val logger = Logger.getLogger(javaClass)
 
-    var myList = mutableListOf<String>()
-
     fun loadNumbers(fileName: String): MutableList<String> {
         logger.debug("Reading file: $fileName")
-        val bufferedReader = File(fileName).bufferedReader()
-        bufferedReader.forEachLine { myList.add(it) }
-        return myList
+        return copyToList(File(fileName).bufferedReader())
+    }
+
+    private fun copyToList(bufferedReader: BufferedReader): MutableList<String> {
+        val inputNumbers = mutableListOf<String>()
+        bufferedReader.forEachLine(inputNumbers::add)
+        return inputNumbers
     }
 }
