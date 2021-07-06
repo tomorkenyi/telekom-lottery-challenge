@@ -11,8 +11,6 @@ You can run your application in dev mode that enables live coding using:
 ./gradlew quarkusDev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
 ## Packaging and running the application
 
 The application can be packaged using:
@@ -27,23 +25,20 @@ If you want to build an _über-jar_, execute the following command:
 ./gradlew build -Dquarkus.package.type=uber-jar
 ```
 
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
+The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar input.txt`.
 
-## Creating a native executable
+It is configured to use INFO level logging, but with -Dquarkus.log.level=DEBUG argument it will be more verbose, giving meaningful debug info.
 
-You can create a native executable using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native
-```
+## Instructions
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
-```
+After starting the console needs the user input after **READY** is displayed.
 
-You can then execute your native executable with: `./build/telekom-lottery-1.0.0-SNAPSHOT-runner`
+When a single line or multiple lines are given an ENTER should be pressed in order to notify the application (readline method) to start processing the input file and check the lottery winners.
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
+The result count of the winners will be displayed in the following format: _ _ _ _
+Which means two three four and five hits in sorted ordering. After the results the application will ask for the next input in a recursive way. 
+
+You can stop the application by pressing CTRL / CMD + C
 
 ## Related Guides
 
