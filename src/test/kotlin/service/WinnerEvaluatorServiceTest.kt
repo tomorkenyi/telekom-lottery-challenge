@@ -5,14 +5,12 @@ import TestConstants.one_is_illegal
 import TestConstants.sample
 import TestUtil.Companion.createFile
 import TestUtil.Companion.deleteFile
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.quarkus.test.junit.QuarkusMock
 import io.quarkus.test.junit.QuarkusTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.io.BufferedReader
 import java.io.File
 import javax.enterprise.inject.Default
 import javax.inject.Inject
