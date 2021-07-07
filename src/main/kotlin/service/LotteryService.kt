@@ -1,6 +1,9 @@
 package service
 
+import io.smallrye.mutiny.Uni
+import kotlinx.coroutines.runBlocking
 import org.jboss.logging.Logger
+import java.time.Duration
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
@@ -17,14 +20,9 @@ class LotteryService(
     fun startLottery(inputNumbers: MutableList<List<String>>) {
         val drawnNumbersList = drawnNumberReaderService.readDrawnNumbers()
         logger.debug("Drawn numbers: $drawnNumbersList")
-        parallelSearch(inputNumbers, drawnNumbersList)
-    }
 
-    private fun parallelSearch(inputNumbers: MutableList<List<String>>, drawnNumbersList: MutableList<List<String>>) {
         logger.info("Started searching for the winners...")
-        drawnNumbersList.stream().parallel().forEach {
-            winnerEvaluatorService.searchWinners(inputNumbers, it)
-        }
+        winnerEvaluatorService.searchWinners(inputNumbers, drawnNumbersList)
         logger.info("Search finished.")
     }
 }

@@ -6,18 +6,16 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class DrawnNumberReaderService {
 
-    fun readDrawnNumbers(): MutableList<List<String>> {
-        val drawnNumberList = mutableListOf<List<String>>()
+    fun readDrawnNumbers(): List<String> {
 
-        generateSequence(::readLine)
-            .takeWhile { !it.matches("".toRegex()) }
-            .forEach { line ->
-                when {
-                    validate(line) -> drawnNumberList.add(line.split(" "))
-                    else -> System.err.println("Please provide 5 distinct lottery numbers separated by space: $line")
-                }
+        val line = readLine() ?: throw IllegalArgumentException("No input is given.")
+
+        return when (validate(line)) {
+            true -> line.split(" ")
+            else -> {
+                System.err.println("Please provide 5 distinct lottery numbers separated by space: $line")
+                emptyList()
             }
-
-        return drawnNumberList
+        }
     }
 }
