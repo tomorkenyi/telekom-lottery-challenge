@@ -1,7 +1,6 @@
 package service
 
 import org.jboss.logging.Logger
-import util.ValidatorUtil.Companion.validate
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
@@ -9,24 +8,18 @@ class WinnerEvaluatorService {
 
     private val logger = Logger.getLogger(javaClass)
 
-    fun searchWinners(inputNumbers: MutableList<String>, drawnNumbers: List<String>): String {
+    fun searchWinners(inputNumbers: MutableList<List<String>>, drawnNumbers: List<String>): String {
         val winners = HashMap<Int, Int>()
         checkNumbers(inputNumbers, drawnNumbers, winners)
         return getResults(winners)
     }
 
-    private fun checkNumbers(inputNumbers: MutableList<String>, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
+    private fun checkNumbers(inputNumbers: MutableList<List<String>>, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
         inputNumbers.forEach { line ->
-            when {
-                validate(line) -> {
-                    line.split(" ")
-                        .count { drawnNumbers.contains(it) }
-                        .let { winners.merge(it, 1, Int::plus) }
-                }
-                else -> logger.debug("Value $line is invalid, skipping.")
-            }
+            line.count { drawnNumbers.contains(it) }
+                .let { winners.merge(it, 1, Int::plus) }
         }
-        logger.debug(winners)
+        logger.debug("For $drawnNumbers the winners are: $winners")
     }
 
     private fun getResults(winners: MutableMap<Int, Int>): String {

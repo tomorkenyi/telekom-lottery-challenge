@@ -1,9 +1,9 @@
 package application
 
-import service.LotteryService
-import service.NumberReaderService
 import io.quarkus.runtime.QuarkusApplication
 import io.quarkus.runtime.annotations.QuarkusMain
+import service.LotteryService
+import service.NumberReaderService
 import java.io.IOException
 import javax.inject.Inject
 
