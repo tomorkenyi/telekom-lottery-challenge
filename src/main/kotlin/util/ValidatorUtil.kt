@@ -3,7 +3,7 @@ package util
 class ValidatorUtil {
     companion object {
 
-        internal val pattern = "^((90|[1-8][0-9]|[1-9])\\s){4}(90|[1-8][0-9]|[1-9])\$".toRegex()
+        private val pattern = "^((90|[1-8][0-9]|[1-9])\\s){4}(90|[1-8][0-9]|[1-9])\$".toRegex()
 
         fun validate(line: String): Boolean {
             return when {
@@ -13,8 +13,7 @@ class ValidatorUtil {
         }
 
         private fun hasDuplicates(line: String): Boolean {
-            val elements = line.splitToSequence(" ")
-            return elements.count() != elements.distinct().count()
+            return line.split(" ").groupingBy { it }.eachCount().any { it.value > 1 }
         }
     }
 }

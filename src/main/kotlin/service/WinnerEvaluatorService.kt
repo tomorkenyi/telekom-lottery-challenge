@@ -9,17 +9,18 @@ class WinnerEvaluatorService {
     private val logger = Logger.getLogger(javaClass)
 
     fun searchWinners(inputNumbers: MutableList<List<String>>, drawnNumbers: List<String>): String {
-        val winners = HashMap<Int, Int>()
-        checkNumbers(inputNumbers, drawnNumbers, winners)
-        return getResults(winners)
+        return getResults(checkNumbers(inputNumbers, drawnNumbers))
     }
 
-    private fun checkNumbers(inputNumbers: MutableList<List<String>>, drawnNumbers: List<String>, winners: MutableMap<Int, Int>) {
-        inputNumbers.forEach { line ->
+    private fun checkNumbers(inputNumbers: MutableList<List<String>>, drawnNumbers: List<String>): MutableMap<Int, Int> {
+        val winners = HashMap<Int, Int>()
+
+        inputNumbers.groupingBy { line ->
             line.count { drawnNumbers.contains(it) }
-                .let { winners.merge(it, 1, Int::plus) }
-        }
+        }.eachCountTo(winners)
+
         logger.debug("For $drawnNumbers the winners are: $winners")
+        return winners
     }
 
     private fun getResults(winners: MutableMap<Int, Int>): String {
@@ -31,5 +32,6 @@ class WinnerEvaluatorService {
                 println(it)
             }
     }
+
 }
 

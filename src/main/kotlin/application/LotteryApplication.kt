@@ -17,8 +17,9 @@ class LotteryApplication(
 
     override fun run(vararg args: String?): Int {
         val numbers = numberReaderService.loadNumbers(args[0] ?: throw IOException("Please provide a file."))
+        println("READY")
+
         while (true) {
-            println("READY")
             lotteryService.startLottery(numbers)
         }
     }

@@ -1,9 +1,7 @@
 package service
 
-import io.smallrye.mutiny.Uni
-import kotlinx.coroutines.runBlocking
 import org.jboss.logging.Logger
-import java.time.Duration
+import java.util.concurrent.CompletableFuture
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
@@ -21,8 +19,12 @@ class LotteryService(
         val drawnNumbersList = drawnNumberReaderService.readDrawnNumbers()
         logger.debug("Drawn numbers: $drawnNumbersList")
 
-        logger.info("Started searching for the winners...")
-        winnerEvaluatorService.searchWinners(inputNumbers, drawnNumbersList)
-        logger.info("Search finished.")
+        // Quarkus doesn't support coroutines or flows from Kotlin yet
+        CompletableFuture.supplyAsync {
+            logger.debug("Started searching for the winners of $drawnNumbersList")
+            winnerEvaluatorService.searchWinners(inputNumbers, drawnNumbersList)
+            logger.debug("Search finished for $drawnNumbersList")
+        }
+
     }
 }

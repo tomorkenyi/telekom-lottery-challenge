@@ -10,12 +10,14 @@ class DrawnNumberReaderService {
 
         val line = readLine() ?: throw IllegalArgumentException("No input is given.")
 
-        return when (validate(line)) {
-            true -> line.split(" ")
-            else -> {
-                System.err.println("Please provide 5 distinct lottery numbers separated by space: $line")
-                emptyList()
+        try {
+            return when (validate(line)) {
+                true -> line.split(" ")
+                else -> throw NoSuchElementException()
             }
+        } catch (e: NoSuchElementException) {
+            System.err.println("Input '$line' is invalid. Please provide 5 distinct lottery numbers separated by space.")
         }
+        return readDrawnNumbers()
     }
 }
